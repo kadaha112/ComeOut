@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="activities.LoginActivity"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+
+    <ImageView
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/my_logo"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="간편하게 로그인해서 \n 다양한 서비스를 받아보세요"
+        android:fontFamily="@font/font1"
+        android:textColor="@color/black" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="이메일을 입력하세요"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="8dp"
+        app:hintAnimationEnabled="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="비밀번호를 입력하세요"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="12dp"
+        app:hintAnimationEnabled="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/sign_up_loginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="로그인"
+        android:fontFamily="@font/font1"
+        android:textSize="17sp"
+        android:backgroundTint="#FEAB5E"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/browse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계정 없이 둘러보기"
+            android:textColor="#686666"
+            android:background="?attr/selectableItemBackground"/>
+        <TextView
+            android:id="@+id/clickGoogle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Google 로그인하기"
+            android:textSize="18sp"
+            android:background="@drawable/bg_intro_login_google_frame"
+            android:padding="8dp"
+            android:fontFamily="@font/font1"
+            android:drawableStart="@drawable/intro_login_google"
+            android:drawablePadding="10dp"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:id="@+id/clickKakao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카카오 로그인하기"
+            android:textSize="18sp"
+            android:background="#FCDB3F"
+            android:padding="8dp"
+            android:fontFamily="@font/font1"
+            android:drawableStart="@drawable/intro_login_kakao"
+            android:drawablePadding="10dp"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:id="@+id/clickNaver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="네이버 로그인하기"
+            android:textSize="18sp"
+            android:background="#03C65A"
+            android:padding="8dp"
+            android:fontFamily="@font/font1"
+            android:drawableStart="@drawable/intro_login_naver"
+            android:drawablePadding="10dp"
+            android:layout_margin="8dp"/>
+
+
+        <TextView
+            android:id="@+id/sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="간편회원가입"
+            android:textColor="#040404"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:background="?attr/selectableItemBackground"/>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

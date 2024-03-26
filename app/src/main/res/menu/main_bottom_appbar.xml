@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_btm_home" android:title="홈" android:icon="@drawable/menu_btm_home" />
+    <item android:id="@+id/menu_btm_map" android:title="지도" android:icon="@drawable/menu_btm_map"/>
+    <item android:id="@+id/empty" android:title="" android:enabled="false"/>
+    <item android:id="@+id/menu_btm_favor" android:title="찜 목록" android:icon="@drawable/menu_btm_favor"/>
+    <item android:id="@+id/menu_btm_account" android:title="내 계정" android:icon="@drawable/menu_btm_account"/>
+
+</menu>
