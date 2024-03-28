@@ -5,12 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.daehankang.comeout.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import network.RetrofitApiService
+import network.RetrofitHelper
+import retrofit2.Call
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
@@ -71,6 +78,48 @@ class LoginActivity : AppCompatActivity() {
 
     }
     private fun clickNaver(){
+
+        // 네아로 SDK 초기화
+        NaverIdLoginSDK.initialize(this,"lHP60yGqKrkg9b7IWIiv", "FVfdJDSyKZ","Search Place")
+
+        // 로그인 요청
+        NaverIdLoginSDK.authenticate(this,object : OAuthLoginCallback {
+            override fun onError(errorCode: Int, message: String) {
+                Toast.makeText(this@LoginActivity, "$message", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(httpStatus: Int, message: String) {
+                Toast.makeText(this@LoginActivity, "$message", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSuccess() {
+                Toast.makeText(this@LoginActivity, "로그인에 성공했습니다", Toast.LENGTH_SHORT).show()
+
+                // 사용자 정보를 받아오기.. -- REST API로 받아야 함.
+                // 로그인에 성공하면. REST API로 요청할 수 있는 토큰(token)
+                val accessToken:String? = NaverIdLoginSDK.getAccessToken()
+
+                // Restofit 작업을 통해 사용자 정보 가져오기
+                val retrofit = RetrofitHelper.getRetrofitInstance("https://openapi.naver.com")
+                val retrofitApiService = retrofit.create(RetrofitApiService::class.java)
+                val call = retrofitApiService.getNidUserInfo("Bearer ${accessToken}")
+                call.enqueue(object : retrofit2.Callback<String>{
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        val s = response.body()
+                        AlertDialog.Builder(this@LoginActivity).setMessage(s).create().show()
+
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Toast.makeText(this@LoginActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+            }
+
+        })
 
     }
 
