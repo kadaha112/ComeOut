@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
     private fun clickNaver(){
 
         // 네아로 SDK 초기화
-        NaverIdLoginSDK.initialize(this,"lHP60yGqKrkg9b7IWIiv", "FVfdJDSyKZ","Search Place")
+        NaverIdLoginSDK.initialize(this,"U2MGzMk8kIiCv2p4niWQ", "RCckMk82YM","comeout")
 
         // 로그인 요청
         NaverIdLoginSDK.authenticate(this,object : OAuthLoginCallback {
@@ -115,10 +115,8 @@ class LoginActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<String>, t: Throwable) {
                         Toast.makeText(this@LoginActivity, "${t.message}", Toast.LENGTH_SHORT).show()
                     }
-
                 })
             }
-
         })
 
     }
