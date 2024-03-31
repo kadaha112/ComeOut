@@ -6,16 +6,25 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.daehankang.comeout.databinding.ActivityLoginBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import data.UserAccount
 import network.RetrofitApiService
 import network.RetrofitHelper
 import retrofit2.Call
@@ -33,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
 
         val key = Utility.getKeyHash(this)
         Log.i("key", key)
+
+        KakaoSdk.init(this,"87e49b817a3a721b533c58c263db621c")
 
         auth = Firebase.auth
 
@@ -78,9 +89,55 @@ class LoginActivity : AppCompatActivity() {
         }
     private fun clickGoogle(){
 
+
+        val signInOptions: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+
+        val intent:Intent= GoogleSignIn.getClient(this, signInOptions).signInIntent
+        resultLauncher.launch(intent)
+    }
+
+    val resultLauncher= registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+
+        val intent:Intent?= it.data
+        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
+
+        val account: GoogleSignInAccount= task.result
+        val id:String= account.id.toString()
+        val email:String= account.email ?: ""
+
+        Toast.makeText(this, "구글로그인 성공", Toast.LENGTH_SHORT).show()
+        G.userAccount= UserAccount(id, email)
+
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+
     }
     private fun clickKakao(){
+        val callback:(OAuthToken?, Throwable?)->Unit = { token, error ->
+            if(error != null) {
 
+            }else{
+                Toast.makeText(this, "카카오로그인 성공", Toast.LENGTH_SHORT).show()
+
+                UserApiClient.instance.me { user, error ->
+                    if(user!=null){
+                        val id:String= user.id.toString()
+                        val nickname:String = user.kakaoAccount?.profile?.nickname ?: ""
+
+                        Toast.makeText(this, "$id\n$nickname", Toast.LENGTH_SHORT).show()
+                        G.userAccount= UserAccount(id, nickname)
+
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                }
+            }
+        }
+        if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
+            UserApiClient.instance.loginWithKakaoTalk(this, callback= callback)
+        }else{
+            UserApiClient.instance.loginWithKakaoAccount(this, callback= callback)
+        }
     }
     private fun clickNaver(){
 
@@ -90,21 +147,19 @@ class LoginActivity : AppCompatActivity() {
         // 로그인 요청
         NaverIdLoginSDK.authenticate(this,object : OAuthLoginCallback {
             override fun onError(errorCode: Int, message: String) {
-                Toast.makeText(this@LoginActivity, "$message", Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onFailure(httpStatus: Int, message: String) {
-                Toast.makeText(this@LoginActivity, "$message", Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onSuccess() {
-                Toast.makeText(this@LoginActivity, "로그인에 성공했습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity, "네이버 로그인 성공", Toast.LENGTH_SHORT).show()
 
-                // 사용자 정보를 받아오기.. -- REST API로 받아야 함.
-                // 로그인에 성공하면. REST API로 요청할 수 있는 토큰(token)
+
                 val accessToken:String? = NaverIdLoginSDK.getAccessToken()
 
-                // Restofit 작업을 통해 사용자 정보 가져오기
                 val retrofit = RetrofitHelper.getRetrofitInstance("https://openapi.naver.com")
                 val retrofitApiService = retrofit.create(RetrofitApiService::class.java)
                 val call = retrofitApiService.getNidUserInfo("Bearer ${accessToken}")
@@ -118,7 +173,7 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<String>, t: Throwable) {
-                        Toast.makeText(this@LoginActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+
                     }
                 })
             }

@@ -1,3 +1,3 @@
 package data
 
-data class UserAccout(var id: String, var email:String)
+data class UserAccount(var id: String, var email:String)

@@ -8,27 +8,12 @@
     android:background="@color/white">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/main_logo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/my_logo"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal"/>
 
         <FrameLayout
             android:id="@+id/container_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/main_logo"
             android:layout_marginTop="8dp"/>
-
-    </RelativeLayout>
 
 
 

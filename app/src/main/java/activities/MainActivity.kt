@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        supportFragmentManager.beginTransaction().add(R.id.container_fragment,MainMapFragment()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container_fragment,MainHomeFragment()).commit()
 
         binding.bnv.setOnItemSelectedListener {
             when (it.itemId){
