@@ -2,15 +2,12 @@ package activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.daehankang.comeout.R
 import com.daehankang.comeout.databinding.ActivityMainBinding
-import fragments.MainAccountFragment
-import fragments.MainFavorFragment
-import fragments.MainHomeFragment
-import fragments.MainMapFragment
+import fragments.FragmentMainHome
+import fragments.FragmentMainAccount
+import fragments.FragmentMainFavor
+import fragments.FragmentMainMap
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,14 +18,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        supportFragmentManager.beginTransaction().add(R.id.container_fragment,MainHomeFragment()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container_fragment,FragmentMainHome()).commit()
 
         binding.bnv.setOnItemSelectedListener {
             when (it.itemId){
-                R.id.menu_btm_home -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,MainHomeFragment()).commit()
-                R.id.menu_btm_map -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,MainMapFragment()).commit()
-                R.id.menu_btm_favor -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,MainFavorFragment()).commit()
-                R.id.menu_btm_account -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,MainAccountFragment()).commit()
+                R.id.menu_btm_home -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainHome()).commit()
+                R.id.menu_btm_map -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainMap()).commit()
+                R.id.menu_btm_favor -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainFavor()).commit()
+                R.id.menu_btm_account -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainAccount()).commit()
             }
             true
         }
