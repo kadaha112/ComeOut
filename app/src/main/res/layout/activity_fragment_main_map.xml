@@ -33,15 +33,15 @@
             <include layout="@layout/choice_list" android:id="@+id/layout_choice"/>
         </HorizontalScrollView>
 
-        <RelativeLayout
-            android:id="@+id/container_fragment"
+        <com.kakao.vectormap.MapView
+            android:id="@+id/map_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/scroll_view"
             android:layout_marginTop="8dp">
 
 
-        </RelativeLayout>
+        </com.kakao.vectormap.MapView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_location"

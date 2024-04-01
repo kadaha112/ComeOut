@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="fragments.FragmentMainHome"
+            android:name="activities.FoodListActivity"
             android:exported="false" />
         <activity
             android:name="activities.MainActivityRecommend"

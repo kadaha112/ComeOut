@@ -1,5 +1,6 @@
 package activities
 
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.daehankang.comeout.R
@@ -12,6 +13,9 @@ import fragments.FragmentMainMap
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    var myLocation: Location?= null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
