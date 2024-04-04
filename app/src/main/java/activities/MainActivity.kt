@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.daehankang.comeout.R
 import com.daehankang.comeout.databinding.ActivityMainBinding
+import data.KakaoSearchPlaceResponse
 import fragments.FragmentMainHome
 import fragments.FragmentMainAccount
 import fragments.FragmentMainFavor
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     var myLocation: Location?= null
+    var searchPlaceResponse: KakaoSearchPlaceResponse?= null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
