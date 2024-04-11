@@ -3,13 +3,14 @@ package activities
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.daehankang.comeout.R
 import com.daehankang.comeout.databinding.ActivityMainBinding
 import data.KakaoSearchPlaceResponse
-import fragments.FragmentMainHome
-import fragments.FragmentMainAccount
-import fragments.FragmentMainFavor
-import fragments.FragmentMainMap
+import fragments.MainHomeFragment
+import fragments.MainAccountFragment
+import fragments.MainFavorFragment
+import fragments.MainMapFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,18 +25,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        supportFragmentManager.beginTransaction().add(R.id.container_fragment,FragmentMainHome()).commit()
+        loadFragment(MainHomeFragment())
+        binding.bnv.selectedItemId = R.id.menu_btm_home
 
-        binding.bnv.setOnItemSelectedListener {
-            when (it.itemId){
-                R.id.menu_btm_home -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainHome()).commit()
-                R.id.menu_btm_map -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainMap()).commit()
-                R.id.menu_btm_favor -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainFavor()).commit()
-                R.id.menu_btm_account -> supportFragmentManager.beginTransaction().replace(R.id.container_fragment,FragmentMainAccount()).commit()
+        binding.bnv.setOnNavigationItemSelectedListener { menuItem ->
+            var fragment : Fragment? = null
+            when (menuItem.itemId){
+                R.id.menu_btm_home -> fragment = MainHomeFragment()
+                R.id.menu_btm_map -> fragment = MainMapFragment()
+                R.id.menu_btm_favor -> fragment = MainFavorFragment()
+                R.id.menu_btm_account -> fragment = MainAccountFragment()
             }
+            fragment?.let { loadFragment(it) }
             true
         }
 
-
+    }
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container_fragment, fragment)
+            .commit()
     }
 }

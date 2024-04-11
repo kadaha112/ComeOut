@@ -11,8 +11,15 @@
         android:text="내 찜 목록"
         android:textSize="45sp"
         android:layout_margin="16dp"
-        android:fontFamily="@font/font1"
-        />
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/font1" />
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/tv_favor"
+        android:background="#9C9191"
+        android:layout_marginTop="12dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_favor"
@@ -20,8 +27,8 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        android:layout_below="@id/tv_favor"
-        android:layout_margin="12dp"/>
+        android:layout_below="@id/view"
+        android:layout_margin="16dp"/>
 
 
 </RelativeLayout>
