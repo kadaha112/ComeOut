@@ -12,7 +12,7 @@ interface MovieApiService {
     fun getDailyBoxOffice(@Query("key") apiKey: String, @Query("targetDt") targetDate: String): Call<MovieResponse>
 }
 object RetrofitInstance {
-    private const val BASE_URL = "http://www.kobis.or.kr/"
+    private const val BASE_URL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/"
 
     val api: MovieApiService by lazy {
         Retrofit.Builder()

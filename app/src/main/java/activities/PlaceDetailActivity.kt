@@ -7,10 +7,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.daehankang.comeout.R
 
-class MainActivityFood : AppCompatActivity() {
+class PlaceDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_food)
-
+        setContentView(R.layout.activity_place_detail)
     }
 }

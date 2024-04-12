@@ -30,6 +30,7 @@ class MainHomeFragment : Fragment(){
 
         binding.ivbtnFood.setOnClickListener { activity?.let {
             val intent = Intent(context, MainActivityFood::class.java)
+            intent.putExtra("query","내주변맛집")
             startActivity(intent)
         } }
         binding.ivbtnMovie.setOnClickListener { activity?.let {
