@@ -12,14 +12,17 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.daehankang.comeout.R
 
@@ -54,28 +57,18 @@ import retrofit2.Response
 
 class MainMapFragment : Fragment() {
 
-    private var _binding: FragmentMainMapBinding? = null
-    private val binding get() = _binding!!
-
-    var searchQuery: String = "카페"
-    var myLocation: Location? = null
-    private val locationProviderClient: FusedLocationProviderClient? by lazy {
-        context?.let { LocationServices.getFusedLocationProviderClient(it) }
-    }
-    var searchPlaceResponse: KakaoSearchPlaceResponse? = null
-
-    private val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it) requestMyLocation()
-        else Toast.makeText(context, "내 위치정보를 제공하지 않아 검색기능 사용이 제한됩니다.", Toast.LENGTH_SHORT).show()
-    }
+    var searchQuery:String= "카페"
+    private val binding: FragmentMainMapBinding by lazy { FragmentMainMapBinding.inflate(layoutInflater) }
+    var myLocation:Location?= null
+    val locationProviderClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireActivity()) }
+    var searchPlaceResponse: KakaoSearchPlaceResponse?= null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMainMapBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -83,57 +76,31 @@ class MainMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.mapView.start(mapReadyCallback)
-
-        checkPermissions()
-
-
-        binding.etSearch.setOnEditorActionListener{V, actionId, evert ->
+        binding.fabLocation.setOnClickListener {  }
+        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
             searchQuery = binding.etSearch.text.toString()
             searchPlaces()
             false
         }
-
         setChoiceButtonsListener()
 
-
-    }
-    private fun checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        val permissionState: Int= ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_FINE_LOCATION)
+        if(permissionState==PackageManager.PERMISSION_DENIED){
+            //퍼미션을 요청하는 다이얼로그 보이고 그 결과를 받아오는 작업을 대신해주는 대행사 이용
             permissionResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
+        }else{
+            //위치정보수집이 허가되어 있다면.. 곧바로 위치정보 얻어오는 작업 시작
             requestMyLocation()
         }
+        binding.fabLocation.setOnClickListener { requestMyLocation() }
+
+
+
 
     }
-    private fun requestMyLocation() {
-        val request: LocationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 3000).build()
-
-        //실시간 위치정보 갱신 요청 - 퍼미션 체크코드가 있어야만 함.
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        locationProviderClient?.requestLocationUpdates(request,locationCallback, Looper.getMainLooper())
-    }
-    private val locationCallback= object : LocationCallback(){
-        override fun onLocationResult(p0: LocationResult) {
-            super.onLocationResult(p0)
-
-            myLocation= p0.lastLocation
-
-            //위치 탐색이 종료되었으니 내 위치 정보 업데이트를 이제 그만...
-            locationProviderClient?.removeLocationUpdates(this) //this: locationCallback 객체
-
-            //위치정보를 얻었으니.. 키워드 장소검색 작업 시작!
-            searchPlaces()
-        }
+    val permissionResultLauncher: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+        if(it) requestMyLocation()
+        else Toast.makeText(requireContext(), "내 위치정보를 제공하지 않아 검색기능 사용이 제한됩니다.", Toast.LENGTH_SHORT).show()
     }
     private fun setChoiceButtonsListener(){
         binding.layoutChoice.choice01.setOnClickListener { clickChoice(it) }
@@ -147,10 +114,11 @@ class MainMapFragment : Fragment() {
     var choiceID= R.id.choice01
 
     private fun clickChoice(view:View){
+        try {
+        Log.d("MainMapFragment", "clickChoice: Entered clickChoice with ID ${view.id}")
 
         //기존에 선택되었던 ImageView를 찾아서 배경이미지를 선택되지 않은 하얀색 원그림으로 변경
-        val oldChoice = binding.root.findViewById<ImageView>(choiceID)
-        oldChoice.setBackgroundResource(R.drawable.bg_choice)
+        binding.root.findViewById<ImageView>(choiceID).setBackgroundResource(R.drawable.bg_choice)
 
         //현재 클릭한 ImageView의 배경을 선택된 회색 원그림으로 변경
         view.setBackgroundResource(R.drawable.bg_choice_selected)
@@ -167,6 +135,12 @@ class MainMapFragment : Fragment() {
             R.id.choice06->searchQuery="꽃집"
             R.id.choice07->searchQuery="화장실"
         }
+            Log.d("MainMapFragment", "clickChoice: searchQuery set to $searchQuery")
+            searchPlaces()
+        } catch (e: Exception) {
+            Log.e("MainMapFragment", "clickChoice: Error occurred", e)
+            Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+        }
 
         //바뀐 검색장소명으로 검색 요청
         searchPlaces()
@@ -175,8 +149,44 @@ class MainMapFragment : Fragment() {
         binding.etSearch.text.clear()
         binding.etSearch.clearFocus()
     }
+    private fun requestMyLocation(){
+
+        //요청 객체 생성
+        val request: LocationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 3000).build()
+
+        //실시간 위치정보 갱신 요청 - 퍼미션 체크코드가 있어야만 함.
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        locationProviderClient.requestLocationUpdates(request,locationCallback,Looper.getMainLooper())
+    }
+    private val locationCallback= object : LocationCallback(){
+        override fun onLocationResult(p0: LocationResult) {
+            super.onLocationResult(p0)
+
+            myLocation= p0.lastLocation
+
+            //위치 탐색이 종료되었으니 내 위치 정보 업데이트를 이제 그만...
+            locationProviderClient.removeLocationUpdates(this) //this: locationCallback 객체
+
+            //위치정보를 얻었으니.. 키워드 장소검색 작업 시작!
+            searchPlaces()
+        }
+    }
     private fun searchPlaces() {
-        Toast.makeText(requireContext(), "$searchQuery\n${myLocation?.latitude},${myLocation?.longitude}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireContext(),
+            "$searchQuery\n${myLocation?.latitude},${myLocation?.longitude}",
+            Toast.LENGTH_SHORT
+        ).show()
 
         // 레트로핏을 이용한 REST API 작업 수행 - GET방식
         val retrofit = RetrofitHelper.getRetrofitInstance("https://dapi.kakao.com")
@@ -197,13 +207,9 @@ class MainMapFragment : Fragment() {
                 //먼저 데이터가 온전히 잘 왔는지 파악해보기..
                 val meta: PlaceMeta? = searchPlaceResponse?.meta
                 val documents: List<Place>? = searchPlaceResponse?.documents
-                val context = context
-                if (context != null) {
-                    AlertDialog.Builder(context)
-                        .setMessage("${meta?.total_count}\n${documents?.get(0)?.place_name}").create()
-                        .show()
-                }
-
+                AlertDialog.Builder(requireContext())
+                    .setMessage("${meta?.total_count}\n${documents?.get(0)?.place_name}").create()
+                    .show()
 
             }
 
@@ -213,39 +219,45 @@ class MainMapFragment : Fragment() {
 
         })
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
-
-    private val mapReadyCallback : KakaoMapReadyCallback = object : KakaoMapReadyCallback(){
+    private val mapReadyCallback: KakaoMapReadyCallback = object : KakaoMapReadyCallback() {
         override fun onMapReady(kakaoMap: KakaoMap) {
-            val latitude : Double = (activity as MainActivity).myLocation?.latitude ?: 37.566
-            val longitude : Double = (activity as MainActivity).myLocation?.longitude ?: 126.9782
-            val myPos : LatLng = LatLng.from(latitude,longitude)
 
-            val cameraUpdate : CameraUpdate = CameraUpdateFactory.newCenterPosition(myPos, 16)
+            // 현재 내 위치를 지도의 중심위치로 설정
+            val latitude: Double = (activity as MainActivity).myLocation?.latitude ?: 37.566
+            val longitude: Double = (activity as MainActivity).myLocation?.longitude ?: 126.9782
+            val myPos: LatLng = LatLng.from(latitude, longitude)
+
+            // 내 위치로 지도 카메라 이동
+            val cameraUpdate: CameraUpdate = CameraUpdateFactory.newCenterPosition(myPos, 16)
             kakaoMap.moveCamera(cameraUpdate)
 
-            val labelOptions : LabelOptions = LabelOptions.from(myPos).setStyles(R.drawable.ic_mypin) // 벡터그래픽 이미지는 안됨
-
-            val labelLayer : LabelLayer = kakaoMap.labelManager!!.layer!!
-
+            // 내 위치 마커 추가하기
+            val labelOptions: LabelOptions =
+                LabelOptions.from(myPos).setStyles(R.drawable.ic_mypin) // 벡터그래픽 이미지는 안됨
+            // 라벨이 그려질 레이어 객체 소환
+            val labelLayer: LabelLayer = kakaoMap.labelManager!!.layer!!
+            // 라벨 레이어에 라벨 추가
             labelLayer.addLabel(labelOptions)
+            //-----------------------------------------------------------------------------------
 
-            val placeList : List<Place>? = (activity as MainActivity).searchPlaceResponse?.documents
+            // 주변 검색 장소들에 마커 추가하기
+            val placeList: List<Place>? = (activity as MainActivity).searchPlaceResponse?.documents
             placeList?.forEach {
-                val pos = LatLng.from(it.y.toDouble(),it.x.toDouble())
-                val options = LabelOptions.from(pos).setStyles(R.drawable.ic_pin).setTexts(it.place_name, "${it.distance}m").setTag(it)
+                // 마커(라벨) 옵션 객체 생성
+                val pos = LatLng.from(it.y.toDouble(), it.x.toDouble())
+                val options = LabelOptions.from(pos).setStyles(R.drawable.ic_pin)
+                    .setTexts(it.place_name, "${it.distance}m").setTag(it)
                 kakaoMap.labelManager!!.layer!!.addLabel(options)
-            }
+            }// forEach..
 
-            kakaoMap.setOnLabelClickListener{ kakaoMap, layer, label ->
+            // 라벨 클릭
+            kakaoMap.setOnLabelClickListener { kakaoMap, layer, label ->
 
                 label.apply {
+                    // 정보창 [ infoWindow ] 보여주기
                     val layout = GuiLayout(Orientation.Vertical)
-                    layout.setPadding(16,16,16,16)
+                    layout.setPadding(16, 16, 16, 16)
                     layout.setBackground(R.drawable.base_msg, true)
 
                     texts.forEach {
@@ -255,7 +267,8 @@ class MainMapFragment : Fragment() {
                         layout.addView(guiText)
                     }
 
-                    val options : InfoWindowOptions = InfoWindowOptions.from(label.position)
+                    // [정보창 info window] 객체 만들기
+                    val options: InfoWindowOptions = InfoWindowOptions.from(label.position)
                     options.body = layout
                     options.setBodyOffset(0f, -10f)
                     options.setTag(tag)
@@ -264,19 +277,23 @@ class MainMapFragment : Fragment() {
                     kakaoMap.mapWidgetManager!!.infoWindowLayer.addInfoWindow(options)
                 }// apply..
             }// label click..
+
+            // [ 정보창 클릭에 반응하기 ]
             kakaoMap.setOnInfoWindowClickListener { kakaoMap, infoWindow, guiId ->
                 // 장소에 대한 상세 소개 웹페이지를 보여주는 화면으로 이동
                 val intent = Intent(requireContext(), PlaceDetailActivity::class.java)
 
                 // 클릭한 장소에 대한 정보를 json문자열로 변환하여 전달해주기
                 val place: Place = infoWindow.tag as Place
-                val json:String = Gson().toJson(place)
-                intent.putExtra("place",json)
+                val json: String = Gson().toJson(place)
+                intent.putExtra("place", json)
 
                 startActivity(intent)
             }
 
+
         }
+
     }
 }
 

@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.daehankang.comeout.databinding.MovieItemBinding
 import data.Movie
+import java.text.NumberFormat
+import java.util.Locale
 
 class MovieAdapter(private var movies: List<Movie>) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -21,7 +23,7 @@ class MovieAdapter(private var movies: List<Movie>) : RecyclerView.Adapter<Movie
             tvRank.text = movie.rank +"위"
             tvTitle.text = movie.movieNm
             tvReleaseDate.text = "개봉일 : "+movie.openDt
-            tvAudience.text = "누적 관객수 : "+movie.audiAcc
+            tvAudience.text = "누적 관객수 : ${formatNumber(movie.audiAcc)}명"
         }
     }
 
@@ -30,5 +32,9 @@ class MovieAdapter(private var movies: List<Movie>) : RecyclerView.Adapter<Movie
     fun updateMovies(newMovies: List<Movie>){
         movies = newMovies
         notifyDataSetChanged()
+    }
+    private fun formatNumber(number: String): String {
+        val numberFormat = NumberFormat.getNumberInstance(Locale.US)
+        return numberFormat.format(number.toLong())
     }
 }
