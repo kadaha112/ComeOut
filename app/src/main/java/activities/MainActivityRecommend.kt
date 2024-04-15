@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.daehankang.comeout.R
 import com.daehankang.comeout.databinding.ActivityMainRecommendBinding
@@ -38,7 +39,6 @@ class MainActivityRecommend : AppCompatActivity() {
         postAdapter = RMPostAdapter(this,posts)
         recyclerView.adapter = postAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
-
     }
 
 }

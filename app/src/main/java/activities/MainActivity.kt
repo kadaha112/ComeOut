@@ -1,5 +1,6 @@
 package activities
 
+import android.content.Intent
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
             fragment?.let { loadFragment(it) }
             true
         }
+
+        binding.fabWrite.setOnClickListener { startActivity(Intent(this,WriteActivity::class.java)) }
 
     }
     private fun loadFragment(fragment: Fragment) {

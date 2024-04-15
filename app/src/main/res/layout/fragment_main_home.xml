@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/my_logo" />
+        android:src="@drawable/my_logo"
+        android:layout_marginTop="40dp"/>
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
         <ImageButton
             android:id="@+id/ivbtn_food"
             android:layout_width="270dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_margin="8dp"
             android:src="@drawable/main_fragment_home_food"
             android:scaleType="centerCrop"
@@ -33,7 +34,7 @@
         <ImageButton
             android:id="@+id/ivbtn_movie"
             android:layout_width="270dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_margin="8dp"
             android:backgroundTint="#E4A7A7"
             android:scaleType="centerCrop"
@@ -41,7 +42,7 @@
         <ImageButton
             android:id="@+id/ivbtn_recommend"
             android:layout_width="270dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_margin="8dp"
             android:backgroundTint="#A9D378"
             android:scaleType="centerCrop"

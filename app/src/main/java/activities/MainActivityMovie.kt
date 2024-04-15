@@ -27,6 +27,8 @@ class MainActivityMovie : AppCompatActivity() {
         binding = ActivityMainMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.movieToolbar.setNavigationOnClickListener { finish() }
+
         setupRecyclerView()
         loadMoviesFromApi()
     }

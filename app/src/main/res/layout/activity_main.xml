@@ -39,12 +39,12 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_write"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:backgroundTint="#45BAEF"
-        app:layout_anchor="@id/bab"
-        android:src="@drawable/menu_btm_write"/>
+        android:src="@drawable/menu_btm_write"
+        app:layout_anchor="@id/bab" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
