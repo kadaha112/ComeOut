@@ -1,6 +1,7 @@
 package adapter
 
-import activities.FoodListActivity
+import activities.PlaceDetailActivity
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.daehankang.comeout.databinding.RecyclerItemListFragmentBinding
 import com.google.gson.Gson
 import data.Place
 
-class PlaceListRecyclerAdapter(private var documents: List<Place>) : RecyclerView.Adapter<PlaceListRecyclerAdapter.VH>() {
+class PlaceListRecyclerAdapter(private val context: Context, private var documents: List<Place>) : RecyclerView.Adapter<PlaceListRecyclerAdapter.VH>() {
 
     inner class VH(val binding: RecyclerItemListFragmentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(place: Place) {
@@ -20,8 +21,7 @@ class PlaceListRecyclerAdapter(private var documents: List<Place>) : RecyclerVie
             binding.tvDistance.text = "${place.distance}m"
 
             binding.root.setOnClickListener {
-                val context = binding.root.context
-                val intent = Intent(context, FoodListActivity::class.java)
+                val intent = Intent(context, PlaceDetailActivity::class.java)
                 try {
                     val gson = Gson()
                     val placeJson = gson.toJson(place)

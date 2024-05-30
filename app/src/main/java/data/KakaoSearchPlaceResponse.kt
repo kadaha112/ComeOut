@@ -1,5 +1,8 @@
 package data
 
+import android.location.Location
+
+
 data class KakaoSearchPlaceResponse(var meta: PlaceMeta, var documents: List<Place>)
 
 data class PlaceMeta(var total_count:Int, var pageable_count:Int, var is_end:Boolean)
@@ -16,3 +19,6 @@ data class Place(
     var place_url:String,
     var distance:String
 )
+interface LocationUpdateListener {
+    fun onLocationUpdated(location: Location)
+}

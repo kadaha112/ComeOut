@@ -24,9 +24,6 @@
             android:name="activities.PlaceDetailActivity"
             android:exported="false" />
         <activity
-            android:name="activities.FoodListActivity"
-            android:exported="false" />
-        <activity
             android:name="activities.MainActivityRecommend"
             android:exported="false" />
         <activity

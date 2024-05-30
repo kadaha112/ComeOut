@@ -1,5 +1,7 @@
 package fragments
 
+import data.LocationUpdateListener
+import activities.MainActivity
 import activities.MainActivityFood
 import activities.MainActivityMovie
 import activities.MainActivityRecommend
@@ -13,13 +15,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.daehankang.comeout.databinding.FragmentMainHomeBinding
 
-class MainHomeFragment : Fragment(){
+class MainHomeFragment : Fragment(), LocationUpdateListener {
 
     private val binding by lazy { FragmentMainHomeBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,22 +30,21 @@ class MainHomeFragment : Fragment(){
     ): View? {
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 위치 데이터 받아오기
         val location = arguments?.getParcelable<Location>("location")
-        Log.d("MainHomeFragment", "Received location: $location")
+        Log.d("MainHomeFragmentLocation", "Received location: $location")
 
-        // 위치 데이터 로그 확인 후 사용
         binding.ivbtnFood.setOnClickListener {
-            val intent = Intent(context, MainActivityFood::class.java).apply {
-                putExtra("location", location)
-                putExtra("searchQuery", "내주변맛집")
+            if (location != null) {
+                startMainActivityFood(location)
+            } else {
+                (activity as MainActivity).locationUpdateListener = this
+                (activity as MainActivity).requestMyLocation()
             }
-            startActivity(intent)
         }
-
 
         binding.ivbtnMovie.setOnClickListener { activity?.let {
             val intent = Intent(context, MainActivityMovie::class.java)
@@ -52,12 +54,17 @@ class MainHomeFragment : Fragment(){
             val intent = Intent(context, MainActivityRecommend::class.java)
             startActivity(intent)
         } }
-
-
-
-
-
     }
 
+    private fun startMainActivityFood(location: Location) {
+        val intent = Intent(context, MainActivityFood::class.java).apply {
+            putExtra("location", location)
+            putExtra("searchQuery", "내주변맛집")
+        }
+        startActivity(intent)
+    }
 
+    override fun onLocationUpdated(location: Location) {
+        startMainActivityFood(location)
+    }
 }

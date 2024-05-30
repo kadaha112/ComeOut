@@ -17,7 +17,6 @@
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:columnCount="1"
         android:rowCount="1000"
         tools:ignore="MissingConstraints"
