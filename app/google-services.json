@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "631090084753",
+    "project_id": "comeout-dcdf7",
+    "storage_bucket": "comeout-dcdf7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631090084753:android:6aa60a97d671ef2729f830",
+        "android_client_info": {
+          "package_name": "com.daehankang.comeout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631090084753-vhs9ii68kss35kbut3mee21b78ggivpb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.daehankang.comeout",
+            "certificate_hash": "ed8393c54f1233efab7029e30711aff653a16473"
+          }
+        },
+        {
+          "client_id": "631090084753-f8i0lb2c08uohmb6gkb9hg945ovfv7gv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR1lBiXqXiMMoXwEF0A6HobJ5UIEYPzzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631090084753-f8i0lb2c08uohmb6gkb9hg945ovfv7gv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

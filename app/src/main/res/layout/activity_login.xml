@@ -36,9 +36,11 @@
         android:layout_marginBottom="8dp"
         app:hintAnimationEnabled="true">
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -51,9 +53,11 @@
         android:layout_marginBottom="12dp"
         app:hintAnimationEnabled="true">
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -85,7 +89,8 @@
             android:id="@+id/clickGoogle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Google 로그인하기"
+            android:text=" 구 글  로그인하기"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:background="@drawable/bg_intro_login_google_frame"
             android:padding="8dp"
@@ -99,6 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카카오 로그인하기"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:background="#FCDB3F"
             android:padding="8dp"
@@ -111,6 +117,7 @@
             android:id="@+id/clickNaver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="네이버 로그인하기"
             android:textSize="18sp"
             android:background="#03C65A"

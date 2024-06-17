@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +15,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ComeOut"
-        tools:targetApi="31" >
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name="activities.WriteActivity"
+            android:exported="false" />
+        <activity
+            android:name="activities.PlaceDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name="activities.MainActivityRecommend"
+            android:exported="false" />
+        <activity
+            android:name="activities.MainActivityMovie"
+            android:exported="false" />
+        <activity
+            android:name="activities.MainActivityFood"
+            android:exported="false" />
+        <activity
+            android:name="activities.SignUpActivity"
+            android:exported="false" />
         <activity
             android:name="activities.LoginActivity"
             android:exported="false" />
         <activity
             android:name="activities.IntroActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,9 +48,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="activities.MainActivity"
-            android:exported="false" >
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao87e49b817a3a721b533c58c263db621c" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name="activities.MainActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.kakao.vectormap.APP_KEY"
+            android:value="87e49b817a3a721b533c58c263db621c" />
     </application>
 
 </manifest>
